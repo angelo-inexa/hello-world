@@ -44,7 +44,17 @@ jobs:
           name: "echo owner of project"
           command: |
             echo $PROJECT_OWNER
+  fail_job:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - run: return 1
 
+      - run:
+          name: on_error
+          command: echo there is a failure
+          when: on_fail
 workflows:
   welcome:
     jobs:
@@ -56,3 +66,4 @@ workflows:
       - print-owner:
           requires:
             - print-hello
+      - fail_job
