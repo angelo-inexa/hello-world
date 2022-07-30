@@ -10,21 +10,21 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      - run: echo hello > output.txt
+      - run: echo "hello world" > ~/output.txt
       - persist_to_workspace:
           root: ~/
           path:
-            -output:txt
-         
+            - output:txt
+
   print-world:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - attach_workspace:
           at: ~/
-      -run: cat ~/output.txt
-        
-     # - checkout
+      - run: cat ~/output.txt
+
+      # - checkout
       #- run: echo world
 
   print-owner:
@@ -32,20 +32,18 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      - run: 
-         name: "echo owner of project"
-         command: |
-           echo $PROJECT_OWNER 
-        
-
+      - run:
+          name: "echo owner of project"
+          command: |
+            echo $PROJECT_OWNER
 
 workflows:
   welcome:
     jobs:
       - print-hello
       - print-world:
-         requires:
-           - print-hello
+          requires:
+            - print-hello
       - print-owner:
-         requires:
-           - print-hello
+          requires:
+            - print-hello
